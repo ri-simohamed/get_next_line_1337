@@ -1,97 +1,63 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mrami <mrami@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/28 20:56:36 by mrami             #+#    #+#             */
-/*   Updated: 2022/12/14 15:42:29 by mrami            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "get_next_line.h"
 
-# include "get_next_line.h"
+size_t	ft_strlen(char *str)
+{
+	int len;
 
-size_t	ft_strlen(char *s)
+	while (str[len])
+	{
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_strchr(char *str, int c)
+{
+	if (!str)
+		return NULL;
+	while (*str != (char)c)
+	{
+		if (!*str)
+			return (NULL);
+		str++;
+	}
+	return ((char *)str);
+}
+
+size_t	ft_strlcpy(char *dst, char *src, size_t dstsize)
 {
 	size_t	i;
 
 	i = 0;
-	if (!s)
+	if (dstsize == 0)
+		return (ft_strlen(src));
+	while (i < (dstsize - 1) && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
+}
+
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t	len_s1;
+	size_t	len_s2;
+	char	*location;
+
+	if (!s1)
+		s1 = "";
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	location = malloc ((len_s1 + len_s2) + 1);
+	if (!location)
 		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-
-char	*ft_strchr(char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	if (c == '\0')
-		return (NULL);
-	while (s[i] != '\0')
+	else
 	{
-		if (s[i] == (char) c)
-			return ((char *)&s[i]);
-		i++;
+		ft_strlcpy(location, s1, len_s1 += 1);
+		ft_strlcpy(location + (len_s1 - 1), s2, len_s2 + 1);
 	}
-	return (0);
-}
-
-char	*ft_get_line(char *s)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	if (!s[i])
-		return (NULL);
-	while (s[i] && s[i] != '\n')
-		i++;
-	str = (char *)malloc(sizeof(char) * (i + 2));
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (s[i] && s[i] != '\n')
-	{
-		str[i] = s[i];
-		i++;
-	}
-	if (s[i] == '\n')
-	{
-		str[i] = s[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-char	*ft_next_str(char *s)
-{
-	int		i;
-	int		j;
-	char	*str;
-
-	i = 0;
-	while (s[i] && s[i] != '\n')
-		i++;
-	if (!s[i])
-	{
-		free(s);
-		return (NULL);
-	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s) - i + 1));
-	if (!str)
-		return (NULL);
-	i++;
-	j = 0;
-	while (s[i])
-		str[j++] = s[i++];
-	str[j] = '\0';
-	free(s);
-	return (str);
+	return (location);
 }
